@@ -12,7 +12,6 @@ class JobPaymentService {
       const jobPrice = jobData.price,
         contractId = jobData.ContractId;
 
-      // const contractData = await Contract.findByPk(ContractId);
       const contractData = await getContractById(contractId, dbModels);
       const clientId = contractData.ClientId,
         contractorId = contractData.ContractorId;

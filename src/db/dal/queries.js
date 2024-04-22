@@ -73,10 +73,43 @@ const getUnpaidJobListForUserId = async (userId, dbModels) => {
     return jobs;
 }
 
+const getBalanceDueForClientId = async(clientId, dbModels, transaction) => {
+  /**
+   * Add locking mechanism to the profile retrieval if requested by a transaction process.
+   * This is useful to ensure that no other transactions can modify.
+   */
+  const totalBalanceDue = await dbModels.Job.sum('price', {
+    where: {
+      paid: { [Op.eq]: null } 
+    },
+    include: [
+      {
+        model: dbModels.Contract,
+        required: true,
+        include: [
+          {
+            model: dbModels.Profile,
+            as: 'Client',
+            where: {
+              id: clientId
+            },
+            required: true
+          }
+        ]
+      }
+    ],
+    transaction,
+    lock: true
+  });
+
+  return totalBalanceDue;
+}
+
 module.exports = {
   getContractById,
   getJobById,
   getNonTerminatedContractsForUserId,
   getProfileById,
   getUnpaidJobListForUserId,
+  getBalanceDueForClientId
 }
