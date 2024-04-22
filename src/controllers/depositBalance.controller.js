@@ -22,7 +22,7 @@ class DepositBalance {
       const {error} = validationSchema.validate({ profileId, depositAmount})
       if(error) return  res.status(400).json({ message: error.details[0].message });
 
-      const response = await depositBalanceServiceInstance.post(profileId, depositAmount, dbModels, sequelizeInstance);
+      const response = await depositBalanceServiceInstance.addBalance(profileId, depositAmount, dbModels, sequelizeInstance);
       return res.status(response.statusCode).json(response);
     } catch(error) {
       console.error('Errorr :: DepositBalanceController :: ', error.message);

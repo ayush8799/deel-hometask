@@ -1,4 +1,3 @@
-// const { Profile, Contract, Job } = require('../src/model');
 
 const {Profile, Contract, Job} = require('../src/db/index.models');
 
@@ -74,6 +73,14 @@ async function seed() {
       lastName: 'II Elessar Telcontarvalds',
       profession: 'Fighter',
       balance: 314,
+      type:'contractor'
+    }),
+    Profile.create({
+      id: 9,
+      firstName: 'Ayush',
+      lastName: 'New User',
+      profession: 'Fighter',
+      balance: 3140,
       type:'contractor'
     }),
     Contract.create({

@@ -1,5 +1,5 @@
 const {Sequelize } = require("../dbConnection")
-const { Op, literal } = Sequelize;
+const { Op } = Sequelize;
 
 const getContractById = async (id, dbModels) => {
   const contract = await dbModels.Contract.findOne({where: {id}});
@@ -105,11 +105,84 @@ const getBalanceDueForClientId = async(clientId, dbModels, transaction) => {
   return totalBalanceDue;
 }
 
+const getBestClientsList = async (startTime, endTime, limit, offset, dbModels) => {
+  let result = (await dbModels.Profile.findAll({
+    attributes: [
+      'id',
+      'firstName',
+      'lastName',
+      [Sequelize.fn('SUM', Sequelize.col('Client->Jobs.price')), 'amountPaid']
+    ],
+    include: [
+      {
+        model: dbModels.Contract,
+        as: 'Client',
+        attributes: [],
+        required: true,
+        include: [
+          {
+            model: dbModels.Job,
+            attributes: [],
+            required: true,
+          }
+        ],
+        order: [['amountPaid', 'DESC']],
+      }
+    ],
+    where: {
+      '$Client->Jobs.paid$': 1,
+      '$Client->Jobs.paymentDate$': {
+        [Sequelize.Op.between]: [startTime, endTime]
+      }
+    },
+    group: ['Profile.id'],
+    order: [['amountPaid', 'DESC']],
+    // limit: limit,
+    // offset: offset
+  })).slice(offset, limit + offset);
+
+  return result;
+}
+
+const getBestProfessionList = async (startTime, endTime, dbModels) => {
+  const result = await dbModels.Profile.findAll({
+    attributes: [
+      'profession',
+      [Sequelize.fn('SUM', Sequelize.col('Contractor->Jobs.price')), 'totalEarned']
+    ],
+    include: [
+      {
+        model: dbModels.Contract,
+        as: 'Contractor',
+        required: true,
+        include: [
+          {
+            model: dbModels.Job,
+            attributes: [],
+            required: true
+          }
+        ]
+      }
+    ],
+    where: {
+      '$Contractor->Jobs.paid$': 1,
+      '$Contractor->Jobs.paymentDate$': {
+        [Sequelize.Op.between]: [startTime, endTime]
+      }
+    },
+    group: ['profession'],
+    order: [['totalEarned', 'DESC']]
+  });
+  return result;
+}
+
 module.exports = {
   getContractById,
   getJobById,
   getNonTerminatedContractsForUserId,
   getProfileById,
   getUnpaidJobListForUserId,
-  getBalanceDueForClientId
+  getBalanceDueForClientId,
+  getBestClientsList,
+  getBestProfessionList
 }

@@ -21,7 +21,7 @@ class GetUserContract {
         return res.status(400).json({ message: error.details[0].message });
       }
 
-      const response = await getUserContractServiceInstance.get(contractId, clientId, dbModels);
+      const response = await getUserContractServiceInstance.fetchUserContract(contractId, clientId, dbModels);
       return res.status(response.statusCode).json(response);
     } catch(err) {
       console.error('Error :: GetUserContractController :: ', err);

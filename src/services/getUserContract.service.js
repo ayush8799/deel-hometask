@@ -1,8 +1,9 @@
 
 const { getContractById } = require("../db/dal/queries");
+const ErrorBuilder = require("../utils/error.util");
 
 class GetUserContractService {
-  async get(contractId, clientId, dbModels) {
+  async fetchUserContract(contractId, clientId, dbModels) {
     try {
       const contract = await getContractById(contractId, dbModels);
       if(!contract) throw new Error("INVALID_DATA");
@@ -18,26 +19,7 @@ class GetUserContractService {
       return responseObj;
     } catch (error) {
        console.error('Error :: GetUserContractService :: ', error);
-       let responseObj = {message: error.message};
-       switch (error.message) {
-        case "INVALID_DATA":
-          responseObj.statusCode = 400;
-          responseObj.data = {};
-          break;
-
-        case "FORBIDDEN":
-          responseObj.statusCode = 403;
-          responseObj.data = {};
-          break;
-       
-        default:
-          responseObj.statusCode = 500;
-          responseObj.data = {};
-          responseObj.message = 'SOMETHING_WENT_WRONG';
-          break;
-       }
-
-       return responseObj;
+       return ErrorBuilder(error.message);
     }
   }
 }

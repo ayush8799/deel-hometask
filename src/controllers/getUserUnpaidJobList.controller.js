@@ -11,7 +11,6 @@ class GetUserUnpaidJobList {
 
   async controller(req, res) {
     try{
-      // const {Job, Contract} = req.app.get('models');
       const dbModels = req.app.get('models');
       const profileId = req.get('profile_id');
 
@@ -20,7 +19,7 @@ class GetUserUnpaidJobList {
         return res.status(400).json({ message: error.details[0].message });
       }
 
-      const response = await getUserUnpaidJobListServiceInstance.get(profileId, dbModels);
+      const response = await getUserUnpaidJobListServiceInstance.fetchUnpaidJobs(profileId, dbModels);
       return res.status(response.statusCode).json(response);
       
     } catch(err) {

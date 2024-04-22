@@ -96,3 +96,17 @@ It would be great for example if you'd write some unit test / simple frontend de
 When you have finished the assignment, zip your repo (make sure to include .git folder) and send us the zip.
 
 Thank you and good luck! 🙏
+
+
+## Assignment Structure and Setup
+
+
+1. All the source code is bundled in `/src` directory.
+2. All the routes are defined in `src/routes/api.routes.js`.
+3. Postman  collection for testing API endpoints can be found at root `apis.postmanCollection.json`.
+4. Test cases  are written using Jest framework which is included as a devDependency. All the test cases are added in `tests` directory
+5. All the DB Queries are decoupled from service layer and reside in `src/db/dal` directory.
+6. The admin routes `/admin/*` are only accessible if is_admin: 1 is passed in request headers.
+6. To start, Run `npm install` command on terminal to get all dependencies installed.
+7. Run `npm seed` to  populate data into database.
+8. Run `npm start` to start the server

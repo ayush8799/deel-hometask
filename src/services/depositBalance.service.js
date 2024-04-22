@@ -1,8 +1,9 @@
 
 const { getProfileById, getBalanceDueForClientId } = require("../db/dal/queries");
+const ErrorBuilder = require("../utils/error.util");
 
 class DepositBalanceService {
-  async post(profileId, depositAmount, dbModels, sequelizeInstance) {
+  async addBalance(profileId, depositAmount, dbModels, sequelizeInstance) {
     try {
       let profile = await getProfileById(profileId, dbModels);
       if(!profile) throw new Error('PROFILE_NOT_FOUND');
@@ -37,43 +38,7 @@ class DepositBalanceService {
       return responseObj;
     } catch(error) {
       console.error('Errorr :: DepositBalanceController :: ', error.message);
-      let responseObj = {message: error.message};
-      switch (error.message) {
-        case 'PROFILE_NOT_FOUND':
-          responseObj.statusCode = 400;
-          responseObj.data = {
-            message: `BAD_REQUEST: Invalid user id: ${profileId}`
-          };
-           break;
-
-        case 'INVALID_PROFILE_TYPE':
-          responseObj.statusCode = 403;
-          responseObj.data = {
-            message: `FORBIDDEN: user type forbidden to add amount: ${profileId}`
-          };
-          break;
-
-        case 'DEPOSIT_LIMIT_EXCEEDED':
-          responseObj.statusCode = 400;
-          responseObj.data = {
-           message: `User deposit limit exceeded : ${profileId}`
-          };
-          break;
-
-        case 'TRANSACTION_FAILED_AND_ROLLEDBACK':
-          responseObj.statusCode = 400;
-          responseObj.data = {
-           message: `Transaction failed for user : ${profileId}. Please try again after some time.`
-          };
-          break;
-      
-        default:
-          responseObj.statusCode = 500;
-          responseObj.data = {};
-          responseObj.message = 'SOMETHING_WENT_WRONG';
-          break;
-      }
-      return responseObj;
+      return ErrorBuilder(error.message);
     }
   }
 }

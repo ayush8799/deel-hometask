@@ -26,7 +26,7 @@ class GetUserContractsList {
         return res.status(400).json({ message: error.details[0].message });
       }
 
-      const response = await getUserContractListServiceInstance.get(profileId, limit, offset, dbModels);
+      const response = await getUserContractListServiceInstance.fetchUserContracts(profileId, limit, offset, dbModels);
       return res.status(response.statusCode).json(response);
     } catch(err) {
       console.error('Error :: GetUserContractsListController :: ', err);

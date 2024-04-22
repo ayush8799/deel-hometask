@@ -1,7 +1,8 @@
 const { getUnpaidJobListForUserId } = require("../db/dal/queries");
+const ErrorBuilder = require("../utils/error.util");
 
 class GetUserUnpaidJobListService {
-  async get(profileId, dbModels) {
+  async fetchUnpaidJobs(profileId, dbModels) {
     try {
       const jobs = await getUnpaidJobListForUserId(profileId, dbModels);
       if(!jobs || !jobs.length) throw new Error("NO_DATA_FOUND");
@@ -14,23 +15,8 @@ class GetUserUnpaidJobListService {
 
       return responseObj;
     } catch (error) {
-       console.error('Error :: GetUserUnpaidJobListService :: ', error);
-      let responseObj = { message: error.message };
-      switch (error.message) {
-        case 'NO_DATA_FOUND':
-          responseObj.statusCode = 204;
-          responseObj.data = {
-            message: `No data found for user : ${profileId}`
-          }
-          break;
-
-        default:
-          responseObj.statusCode = 500;
-          responseObj.data = {};
-          responseObj.message = 'SOMETHING_WENT_WRONG';
-          break;
-      }
-      return responseObj
+      console.error('Error :: GetUserUnpaidJobListService :: ', error);
+      return ErrorBuilder(error.message);
     }
   }
 }

@@ -1,8 +1,9 @@
 
 const { getJobById, getContractById, getProfileById } = require("../db/dal/queries");
+const ErrorBuilder = require("../utils/error.util");
 
 class JobPaymentService {
-  async post(jobId, dbModels, sequelizeInstance) {
+  async processJobPayment(jobId, dbModels, sequelizeInstance) {
     try {
 
       const jobData = await getJobById(jobId, dbModels);
@@ -64,43 +65,7 @@ class JobPaymentService {
 
     } catch (error) {
       console.error('Errorr :: JobPaymentService :: ', error.message);
-      let responseObj = { message: error.message };
-      switch (error.message) {
-        case 'INVALID_DATA':
-          responseObj.statusCode = 400;
-          responseObj.data = {
-            message: `BAD_REQUEST: Invalid data: ${jobId}`
-          }
-          break;
-          
-        case 'BALANCE_NOT_SUFFICIENT':
-          responseObj.statusCode = 402;
-          responseObj.data = {
-            message: `Please recharge your balance to pay for job: ${jobId}`
-          }
-          break;
-
-        case 'ALREADY_PAID':
-          responseObj.statusCode = 400;
-          responseObj.data = {
-            message: `The contractor is already paid for job : ${jobId}`
-          }
-          break;
-
-        case 'TRANSACTION_FAILED_AND_ROLLEDBACK':
-          responseObj.statusCode = 400;
-          responseObj.data = {
-            message:  `The payment failed for job : ${jobId}. Please try after sometime.`
-          }
-          break;
-      
-        default:
-          responseObj.statusCode = 500;
-          responseObj.data = {};
-          responseObj.message = 'SOMETHING_WENT_WRONG';
-          break;
-      }
-      return responseObj;
+      return ErrorBuilder(error.message);
     }
   }
 }

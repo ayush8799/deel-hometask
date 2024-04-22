@@ -23,7 +23,6 @@ Profile.init(
     },
     type: {
       type: Sequelize.ENUM('client', 'contractor')
-      // allowNull: false                              // ADD NOT NULL FOR USER TYPE
     }
   },
   {

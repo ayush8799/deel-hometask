@@ -1,0 +1,206 @@
+{
+	"info": {
+		"_postman_id": "4e378552-a226-4a6c-a144-5aaa91a9ee01",
+		"name": "New Collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "/contracts/:contractId",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "profile_id",
+						"value": "1"
+					}
+				],
+				"url": {
+					"raw": "localhost:3001/contracts/9",
+					"host": [
+						"localhost"
+					],
+					"port": "3001",
+					"path": [
+						"contracts",
+						"9"
+					]
+				},
+				"description": "Fetches contract details by contractId"
+			},
+			"response": []
+		},
+		{
+			"name": "/contracts",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "profile_id",
+						"value": "7",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:3001/contracts",
+					"host": [
+						"localhost"
+					],
+					"port": "3001",
+					"path": [
+						"contracts"
+					]
+				},
+				"description": "Fetches all the contracts of a user"
+			},
+			"response": []
+		},
+		{
+			"name": "/jobs/unpaid",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "profile_id",
+						"value": "4",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:3001/jobs/unpaid",
+					"host": [
+						"localhost"
+					],
+					"port": "3001",
+					"path": [
+						"jobs",
+						"unpaid"
+					]
+				},
+				"description": "Fetch all the unpaid jobs for a user"
+			},
+			"response": []
+		},
+		{
+			"name": "/jobs/:job_id/pay",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:3001/jobs/4/pay",
+					"host": [
+						"localhost"
+					],
+					"port": "3001",
+					"path": [
+						"jobs",
+						"4",
+						"pay"
+					]
+				},
+				"description": "Pay for a job_id, from client's account to contractor's account"
+			},
+			"response": []
+		},
+		{
+			"name": "/balances/deposit/:userId",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"depositAmount\": 50 \n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3001/balances/deposit/4",
+					"host": [
+						"localhost"
+					],
+					"port": "3001",
+					"path": [
+						"balances",
+						"deposit",
+						"4"
+					]
+				},
+				"description": "Deposits balance to client account"
+			},
+			"response": []
+		},
+		{
+			"name": "/admin/best-profession?start=<date>&end=<date>",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3001/admin/best-profession?start=2020-08-05&end=2020-08-15",
+					"host": [
+						"localhost"
+					],
+					"port": "3001",
+					"path": [
+						"admin",
+						"best-profession"
+					],
+					"query": [
+						{
+							"key": "start",
+							"value": "2020-08-05"
+						},
+						{
+							"key": "end",
+							"value": "2020-08-15"
+						}
+					]
+				},
+				"description": "Fetch the profession that earned the most money in the given date range."
+			},
+			"response": []
+		},
+		{
+			"name": "/admin/best-clients?start=<startDate>&end=<endDate>",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3001/admin/best-clients?start=2020-08-05&end=2020-08-16",
+					"host": [
+						"localhost"
+					],
+					"port": "3001",
+					"path": [
+						"admin",
+						"best-clients"
+					],
+					"query": [
+						{
+							"key": "start",
+							"value": "2020-08-05"
+						},
+						{
+							"key": "limit",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "offset",
+							"value": "3",
+							"disabled": true
+						},
+						{
+							"key": "end",
+							"value": "2020-08-16"
+						}
+					]
+				},
+				"description": "Fetches clients that paid the most in the given date range"
+			},
+			"response": []
+		}
+	]
+}

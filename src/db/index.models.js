@@ -2,7 +2,6 @@
  * Model Relations
  */
 
-
 const {Profile} = require('./models/Profile.model');
 const {Contract} = require('./models/Contract.model');
 const {Job} = require('./models/Job.model');

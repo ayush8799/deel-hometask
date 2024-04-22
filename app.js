@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const {sequelizeInstance} = require('./db/dbConnection');
+const {sequelizeInstance} = require('./src/db/dbConnection');
 const app = express();
 app.use(bodyParser.json());
 app.set('sequelize', sequelizeInstance)
@@ -11,13 +11,13 @@ initModels();
 // const {getProfile} = require('./middleware/getProfile')
 
 function initModels(){
-    const {Profile, Contract, Job} = require('./db/index.models');
+    const {Profile, Contract, Job} = require('./src/db/index.models');
     app.set('models', {Profile, Contract, Job});
 }
 
 
-// Moved this route to api.routes.js
 /**
+ * MOVED THIS ROUTE IN `src/routes/api.routes.js`
  * FIX ME!
  * @returns contract by id
  */
