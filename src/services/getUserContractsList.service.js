@@ -1,22 +1,10 @@
 
-const {Sequelize } = require("../db/dbConnection")
-const { Op, literal } = Sequelize;
+const { getNonTerminatedContractsForUserId } = require("../db/dal/queries");
 
 class GetUserContractListService {
   async get(profileId, limit, offset, dbModels) {
     try {
-      const contract = await dbModels.Contract.findAll(
-      {
-        where: {
-          [Op.or]: [{ClientId: profileId}, {ContractorId: profileId}],
-          status: {
-            [Op.ne]: 'terminated',
-          }
-        },
-        limit: limit,
-        offset: offset
-      });
-
+      const contract = await getNonTerminatedContractsForUserId(profileId, limit, offset, dbModels);  
       if(!contract || !contract.length) throw new Error("NO_DATA_FOUND");
 
       const responseObj = {

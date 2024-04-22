@@ -1,6 +1,15 @@
+const Joi = require('joi');
 const getUserContractListServiceInstance = require('../services/getUserContractsList.service');
 
 class GetUserContractsList {
+
+  getValidationSchema() {
+    return Joi.object({
+      profileId: Joi.number().integer().positive().required(),
+      limit: Joi.number().integer().min(1).default(2),
+      offset: Joi.number().integer().min(0).default(0)
+    });
+  }
 
   async controller(req, res) {
     try{
@@ -11,6 +20,11 @@ class GetUserContractsList {
       let {limit = '20', offset = '0'} = req.query;
       limit = parseInt(limit);
       offset = parseInt(offset);
+
+      const { error } = this.getValidationSchema().validate({profileId, limit, offset });
+      if (error) {
+        return res.status(400).json({ message: error.details[0].message });
+      }
 
       const response = await getUserContractListServiceInstance.get(profileId, limit, offset, dbModels);
       return res.status(response.statusCode).json(response);

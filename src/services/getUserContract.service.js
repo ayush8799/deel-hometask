@@ -1,8 +1,10 @@
 
+const { getContractById } = require("../db/dal/queries");
+
 class GetUserContractService {
   async get(contractId, clientId, dbModels) {
     try {
-      const contract = await dbModels.Contract.findOne({where: {id: contractId}});
+      const contract = await getContractById(contractId, dbModels);
       if(!contract) throw new Error("INVALID_DATA");
 
       if(contract.ClientId != clientId)  throw new Error("FORBIDDEN");

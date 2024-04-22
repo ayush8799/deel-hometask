@@ -1,37 +1,9 @@
-const {Sequelize } = require("../db/dbConnection")
-const { Op, literal } = Sequelize;
+const { getUnpaidJobListForUserId } = require("../db/dal/queries");
 
 class GetUserUnpaidJobListService {
   async get(profileId, dbModels) {
     try {
-      const jobs = await dbModels.Job.findAll(
-        {
-          attributes: [
-            'id',
-            'description',
-            'price',
-            'paid',
-            'ContractId'
-          ],
-          include: [
-            {
-              model: dbModels.Contract,
-              required: true,
-              attributes: []
-            }
-          ],
-          where: {
-              [Op.or] : [
-                {'$Contract.ClientId$': profileId},
-                {'$Contract.ContractorId$': profileId}
-              ],
-              '$Contract.status$': 'in_progress',
-              paid: {
-                [Op.eq]: null
-              }
-          },
-          // logging: true
-        });
+      const jobs = await getUnpaidJobListForUserId(profileId, dbModels);
       if(!jobs || !jobs.length) throw new Error("NO_DATA_FOUND");
 
       const responseObj = {
